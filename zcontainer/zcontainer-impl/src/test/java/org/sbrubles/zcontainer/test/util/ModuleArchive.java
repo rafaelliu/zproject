@@ -6,6 +6,8 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.exporter.ZipExporter;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.sbrubles.zcontainer.api.module.ModuleConfiguration;
+import org.sbrubles.zcontainer.impl.config.Configuration;
 
 public class ModuleArchive {
 	private JavaArchive bundle;
@@ -19,6 +21,11 @@ public class ModuleArchive {
 	}
 	public ModuleArchive addClass(Class<?>... classes) {
 		bundle.addClasses(classes);
+		return this;
+	}
+	public ModuleArchive addConfiguration(ModuleConfiguration configuration) {
+		File file = Configuration.writeModuleConfiguration(configuration);
+		bundle.addAsResource(file, Configuration.CONFIG_FILE);
 		return this;
 	}
 	public String getName() {

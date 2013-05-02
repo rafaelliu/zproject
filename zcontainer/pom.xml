@@ -1,18 +1,53 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <artifactId>zproject</artifactId>
-    <groupId>org.sbrubles.zproject</groupId>
-    <version>0.0.1-SNAPSHOT</version>
-    <relativePath>..</relativePath>
-  </parent>
-  <artifactId>zcontainer</artifactId>
-  <packaging>pom</packaging>
-  <modules>
-  	<module>zcontainer-api</module>
-  	<module>zcontainer-test</module>
-  	<module>zcontainer-impl</module>
-  	<module>zcontainer-weld</module>
-  	<module>zcontainer-core</module>
-  </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>zproject</artifactId>
+		<groupId>org.sbrubles.zproject</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>zcontainer</artifactId>
+	<packaging>pom</packaging>
+	<modules>
+		<module>zcontainer-api</module>
+		<module>zcontainer-impl</module>
+		<module>zcontainer-arquillian</module>
+		<module>zcontainer-core</module>
+	</modules>
+
+
+	<properties>
+
+        <!-- Versioning -->
+		<version.shrinkwrap_container_jetty>1.1.2</version.shrinkwrap_container_jetty>
+        <version.arquillian_core>1.0.3.Final</version.arquillian_core>
+        <version.cdi-api>1.0</version.cdi-api>
+
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>${version.arquillian_core}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-build</artifactId>
+				<version>${version.arquillian_core}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.enterprise</groupId>
+				<artifactId>cdi-api</artifactId>
+				<version>${version.cdi-api}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 </project>

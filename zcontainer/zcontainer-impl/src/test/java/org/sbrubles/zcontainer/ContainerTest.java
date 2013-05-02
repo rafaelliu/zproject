@@ -1,16 +1,19 @@
 package org.sbrubles.zcontainer;
 
 import java.net.MalformedURLException;
+import java.util.Arrays;
 
-import org.junit.Assert;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.sbrubles.zcontainer.api.Container;
 import org.sbrubles.zcontainer.api.module.Module;
+import org.sbrubles.zcontainer.api.module.ModuleConfiguration;
 import org.sbrubles.zcontainer.api.module.ModuleDescriptor;
 import org.sbrubles.zcontainer.api.module.ModuleStatus;
+import org.sbrubles.zcontainer.impl.util.ModuleConfigurationBuilder;
 import org.sbrubles.zcontainer.test.util.ModuleArchive;
-import org.sbrubles.zcontainer.test.util.ModuleDescriptorBuilder;
 
 import test.ClassA;
 import test.ClassB;
@@ -23,8 +26,8 @@ public class ContainerTest {
 
 	private ModuleArchive archiveA;
 	private ModuleArchive archiveB;
-	private ModuleDescriptor descriptorA;
-	private ModuleDescriptor descriptorB;
+	private ModuleConfiguration descriptorA;
+	private ModuleConfiguration descriptorB;
 	
 	@Before
 	public void init() {
@@ -36,31 +39,40 @@ public class ContainerTest {
 				.addClass(Listener.class)
 				.addClass(ClassB.class);
 		
-		descriptorA = ModuleDescriptorBuilder.newInstance(MODULE_A)
+		/*descriptorA = ModuleDescriptorBuilder.newInstance(MODULE_A)
 				.addDependency(MODULE_B)
 				.addModuleListener(Listener.class.getName())
 				.build();
 
 		descriptorB = ModuleDescriptorBuilder.newInstance(MODULE_B)
 				.addModuleListener(Listener.class.getName())
-				.build();
+				.build();*/
+		
+		descriptorA = new ModuleConfiguration();
+		descriptorA.setName(MODULE_A);
+		descriptorA.setDependencies(Arrays.asList(MODULE_B));
+		descriptorA.setModuleListenerClass(Listener.class.getName());
+		
+		descriptorB = new ModuleConfiguration();
+		descriptorB.setName(MODULE_B);
+		descriptorB.setModuleListenerClass(Listener.class.getName());
 
 	}
 	
 	@Test
-	public void lifeCycleClassloaderTest() throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public void lifeCycleClassloaderTest() throws Exception {
 		System.out.println(System.getProperty("java.class.path"));
 		Container container = Container.create();
 
 		Module moduleA = container.install(archiveA.getInputStream(), descriptorA );
-		Assert.assertTrue(moduleA.getStatus() == ModuleStatus.INSTALLED);
+		assertThat(moduleA.getStatus(), is(ModuleStatus.INSTALLED));
 
 		Module moduleB = container.install(archiveB.getInputStream(), descriptorB );
-		Assert.assertTrue(moduleB.getStatus() == ModuleStatus.ACTIVE);
-		Assert.assertTrue(moduleA.getStatus() == ModuleStatus.ACTIVE);
+		assertThat(moduleB.getStatus(), is(ModuleStatus.ACTIVE));
+		assertThat(moduleA.getStatus(), is(ModuleStatus.ACTIVE));
 
 		container.uninstall(MODULE_B);
-		Assert.assertTrue(moduleA.getStatus() == ModuleStatus.INSTALLED);
+		assertThat(moduleA.getStatus(), is(ModuleStatus.INSTALLED));
 	}
 
 }

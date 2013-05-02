@@ -9,6 +9,15 @@
 		<module>zcontainer</module>
 	</modules>
 
+
+	<properties>
+
+        <!-- override from parent -->
+        <maven.compiler.argument.target>1.7</maven.compiler.argument.target>
+        <maven.compiler.argument.source>1.7</maven.compiler.argument.source>
+
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>

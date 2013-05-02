@@ -1,10 +1,11 @@
 package test;
 
+
 import org.sbrubles.zcontainer.api.classloader.ModuleClassLoader;
-import org.sbrubles.zcontainer.api.listener.ContainerListener;
+import org.sbrubles.zcontainer.api.listener.Activator;
 import org.sbrubles.zcontainer.api.module.Module;
 
-public class Listener implements ContainerListener {
+public class Listener implements Activator {
 	
 	public void onInstall(Module module) {
 	}

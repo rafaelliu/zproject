@@ -9,8 +9,8 @@ import org.junit.Test;
 import org.sbrubles.zcontainer.api.Container;
 import org.sbrubles.zcontainer.api.module.Module;
 import org.sbrubles.zcontainer.impl.ContainerImpl;
+import org.sbrubles.zcontainer.impl.util.ModuleConfigurationBuilder;
 import org.sbrubles.zcontainer.test.util.ModuleArchive;
-import org.sbrubles.zcontainer.test.util.ModuleDescriptorBuilder;
 
 import test.ClassA;
 import test.ClassB;
@@ -34,19 +34,33 @@ public class ModuleTest {
 	public void init() throws Exception {
 		InputStream isA = ModuleArchive.newInstance(MODULE_A + ".jar")
 			.addClass(ClassA.class)
-			.getInputStream();
+			.addConfiguration(
+					ModuleConfigurationBuilder
+					.newInstance(MODULE_A)
+					.build()
+			).getInputStream();
 
 		InputStream isB = ModuleArchive.newInstance(MODULE_B + ".jar")
 			.addClass(ClassB.class)
-			.getInputStream();
+			.addConfiguration(
+					ModuleConfigurationBuilder
+					.newInstance(MODULE_B)
+					.addDependency(MODULE_A)
+					.build()
+			).getInputStream();
 
 		InputStream isC = ModuleArchive.newInstance(MODULE_C + ".jar")
 			.addClass(ClassC.class)
-			.getInputStream();
+			.addConfiguration(
+					ModuleConfigurationBuilder
+					.newInstance(MODULE_C)
+					.addDependency(MODULE_B)
+					.build()
+			).getInputStream();
 		
-		moduleA = container.install(isA, ModuleDescriptorBuilder.newInstance(MODULE_A).build());
-		moduleB = container.install(isB, ModuleDescriptorBuilder.newInstance(MODULE_B).addDependency(MODULE_A).build());
-		moduleC = container.install(isC, ModuleDescriptorBuilder.newInstance(MODULE_C).addDependency(MODULE_B).build());
+		moduleA = container.install(isA);
+		moduleB = container.install(isB);
+		moduleC = container.install(isC);
 	}
 	
 	@Test(expected=ClassNotFoundException.class)

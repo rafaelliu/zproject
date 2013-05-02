@@ -5,11 +5,17 @@ import java.util.List;
 
 public class FilteredClassloader extends ClassLoader {
 
-	private List<String> bootloaderPackages;
+	private List<String> bootloaderPackages = new ArrayList<String>();
+	private List<String> bootloaderClasses = new ArrayList<String>();
 
-	public FilteredClassloader(List<String> bootloaderPackages) {
+	public FilteredClassloader(List<String> bootloaderPackages, List<String> bootloaderClasses) {
 		// this is to make sure the list passed is not immutable
-		this.bootloaderPackages = new ArrayList<String>(bootloaderPackages);
+		if (bootloaderPackages != null) {
+			this.bootloaderPackages.addAll(bootloaderPackages);
+		}
+		if (bootloaderClasses != null) {
+			this.bootloaderClasses.addAll(bootloaderClasses);
+		}
 	}
 
 	@Override
@@ -19,11 +25,20 @@ public class FilteredClassloader extends ClassLoader {
 				return super.loadClass(name, resolve);
 			}
 		}
+		for (String c : bootloaderClasses) {
+			if (name.equals(c)) {
+				return super.loadClass(name, resolve);
+			}
+		}
 		throw new ClassNotFoundException("Class not found: " + name);
 	}
 	
 	public List<String> getBootloaderPackages() {
 		return bootloaderPackages;
+	}
+	
+	public List<String> getBootloaderClasses() {
+		return bootloaderClasses;
 	}
 	
 	@Override

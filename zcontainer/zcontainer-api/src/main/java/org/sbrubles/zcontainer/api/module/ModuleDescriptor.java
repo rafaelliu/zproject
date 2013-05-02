@@ -10,7 +10,6 @@ public class ModuleDescriptor {
 	public final static ModuleDescriptor EMPTY_DESCRIPTOR = new ModuleDescriptor(null);
 	
 	private String name;
-	private URL[] urls = new URL[]{};
 	private String moduleListenerClass;
 	private String containerListenerClass;
 	private List<String> dependencies = new ArrayList<String>();
@@ -33,14 +32,6 @@ public class ModuleDescriptor {
 
 	public void setDependencies(List<String> dependencies) {
 		this.dependencies = dependencies;
-	}
-
-	public URL[] getUrls() {
-		return urls;
-	}
-
-	public void setUrls(URL... urls) {
-		this.urls = urls;
 	}
 
 	public String getModuleListenerClass() {
@@ -82,6 +73,14 @@ public class ModuleDescriptor {
 
 	public void setContainerListenerClass(String containerListenerClass) {
 		this.containerListenerClass = containerListenerClass;
+	}
+
+	@Override
+	public String toString() {
+		return "ModuleDescriptor [name=" + name + ", moduleListenerClass="
+				+ moduleListenerClass + ", containerListenerClass="
+				+ containerListenerClass + ", dependencies=" + dependencies
+				+ "]";
 	}
 
 }

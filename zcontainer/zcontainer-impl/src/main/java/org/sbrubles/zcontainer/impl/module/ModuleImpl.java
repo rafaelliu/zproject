@@ -4,10 +4,18 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+import javax.enterprise.inject.spi.BeanManager;
+
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
+import org.sbrubles.zcontainer.api.Container;
 import org.sbrubles.zcontainer.api.classloader.ModuleClassLoader;
-import org.sbrubles.zcontainer.api.listener.ContainerListener;
+import org.sbrubles.zcontainer.api.listener.Activator;
 import org.sbrubles.zcontainer.api.listener.ModuleListener;
 import org.sbrubles.zcontainer.api.module.Module;
 import org.sbrubles.zcontainer.api.module.ModuleDescriptor;
@@ -21,16 +29,39 @@ public class ModuleImpl implements Module {
 	private ModuleClassLoader classloader;
 	private ModuleStatus status;
 	private ModuleListener moduleListener;
-	private ContainerListener containerListener;
+	private Activator containerListener;
+	private WeldContainer weld;
+	private Container container;
 
-	public ModuleImpl(File file, ModuleDescriptor descriptor) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public ModuleImpl(Container container, File file, ModuleDescriptor descriptor) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+		this.container = container;
 		this.file = file;
 		this.descriptor = descriptor;
 		this.status = ModuleStatus.INSTALLED;
 		
-		URL[] moduleUrl = new URL[]{ file.toURI().toURL() };
-		URL[] urls = concat(descriptor .getUrls(), moduleUrl);
-		classloader = new ModuleClassLoaderImpl(urls);
+		List<URL> urls = new ArrayList<URL>();
+		urls.add( file.toURL() );
+		
+		File libDir = new File(file, "lib");
+		if (libDir.exists()) {
+			
+			for (File f : libDir.listFiles()) {
+				urls.add( f.toURL() );
+			}
+			
+		}
+		
+		List<String> bootloaderPackages = ModuleClassLoaderImpl.DEFAULT_BOOTLOADER_PACKAGES;
+		
+		String property = System.getProperty(ModuleClassLoader.BOOTLOADER_PKGS_PARAMETER);
+//		if (property != null) {
+//			String[] packages = property.split(",");
+//			
+//			bootloaderPackages = new ArrayList<String>(bootloaderPackages);
+//			bootloaderPackages.addAll(Arrays.asList(packages));
+//		}
+		
+		classloader = new ModuleClassLoaderImpl( urls.toArray(new URL[0]), bootloaderPackages  );
 		
 		String moduleListenerClass = descriptor.getModuleListenerClass();
 		if (moduleListenerClass != null) {
@@ -48,7 +79,7 @@ public class ModuleImpl implements Module {
 		if (containerListenerClass != null) {
 			Class<?> listenerClass = classloader.loadClass(containerListenerClass);
 			
-			containerListener = (ContainerListener) listenerClass.newInstance();
+			containerListener = (Activator) listenerClass.newInstance();
 		}
 	}
 
@@ -92,8 +123,20 @@ public class ModuleImpl implements Module {
 				+ ", status=" + status + "]";
 	}
 
-	public ContainerListener getContainerListener() {
+	public Activator getContainerListener() {
 		return containerListener;
+	}
+
+	public BeanManager getBeanManager() {
+		return (weld != null ? weld.getBeanManager() : null);
+	}
+	
+	public void setWeld(WeldContainer weld) {
+		this.weld = weld;
+	}
+
+	public Container getConstainer() {
+		return container;
 	}
 
 }

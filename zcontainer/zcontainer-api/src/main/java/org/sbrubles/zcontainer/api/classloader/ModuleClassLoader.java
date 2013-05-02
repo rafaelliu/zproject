@@ -5,6 +5,8 @@ import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.List;
 
+import org.sbrubles.zcontainer.ContainerPackage;
+
 /**
  * We should try to avoid using ModuleClassLoader and use only the
  * ClassLoader abstraction
@@ -12,6 +14,15 @@ import java.util.List;
  *
  */
 public abstract class ModuleClassLoader extends URLClassLoader {
+
+	public static final List<String> DEFAULT_BOOTLOADER_PACKAGES = Arrays.asList(
+			ContainerPackage.class.getPackage().getName() + ".api",
+			ContainerPackage.class.getPackage().getName() + ".impl",
+			"java", "javax", "org.xml", "org.jboss.weld", "sun");
+
+	public static final String BOOTLOADER_PKGS_PARAMETER = "bootloader.packages";
+	
+	// ========================
 
 	public ModuleClassLoader(URL[] urls, ClassLoader parent) {
 		super(urls, parent);
@@ -21,9 +32,13 @@ public abstract class ModuleClassLoader extends URLClassLoader {
 		super(urls, null);
 	}
 
+	// ========================
+
 	public abstract void addClasspath(URL url);
 
 	public abstract void addBootloaderPackage(String name);
+
+	public abstract void addBootloaderClass(String name);
 
 	public abstract List<ModuleClassLoader> getModuleClassloders();
 
@@ -52,5 +67,4 @@ public abstract class ModuleClassLoader extends URLClassLoader {
 		return sb.toString();
 	}
 
-	
 }

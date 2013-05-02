@@ -3,4 +3,11 @@
   <groupId>org.sbrubles.zcontainer.api</groupId>
   <artifactId>zcontainer-api</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+  	<dependency>
+  		<groupId>javax.enterprise</groupId>
+  		<artifactId>cdi-api</artifactId>
+  		<version>1.1-20130403</version>
+  	</dependency>
+  </dependencies>
 </project>

@@ -1,0 +1,3 @@
+implementingClassName=org.sbrubles.zcontainer.arquillian.archive.impl.ZArchiveImpl
+extension=.zar
+archiveFormat=ZIP

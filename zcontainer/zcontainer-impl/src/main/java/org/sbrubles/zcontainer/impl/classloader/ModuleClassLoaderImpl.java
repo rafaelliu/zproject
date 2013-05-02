@@ -19,11 +19,6 @@ import org.sbrubles.zcontainer.impl.ContainerImpl;
  */
 public class ModuleClassLoaderImpl extends ModuleClassLoader {
 	
-	private static final List<String> DEFAULT_BOOTLOADER_PACKAGES = Arrays.asList(
-			ContainerImpl.class.getPackage().getName(),
-			Container.class.getPackage().getName(),
-			"java");
-
 	private List<ModuleClassLoader> moduleClassloders = new ArrayList<ModuleClassLoader>();
 
 	/**
@@ -32,12 +27,12 @@ public class ModuleClassLoaderImpl extends ModuleClassLoader {
 	 * @param moduleClassloders Dependencies modules
 	 */
 	public ModuleClassLoaderImpl(URL[] urls, List<ModuleClassLoader> moduleClassloders, List<String> bootloaderPackages) {
-		super(urls, new FilteredClassloader(bootloaderPackages));
+		super(urls, new FilteredClassloader(bootloaderPackages, null));
 		this.moduleClassloders = moduleClassloders;
 	}
 	
-	public ModuleClassLoaderImpl(URL[] urls, List<ModuleClassLoader> moduleClassloders) {
-		this(urls, moduleClassloders, DEFAULT_BOOTLOADER_PACKAGES);
+	public ModuleClassLoaderImpl(URL[] urls, List<String> bootloaderPackages) {
+		this(urls, new ArrayList<ModuleClassLoader>(), bootloaderPackages);
 	}
 	
 	public ModuleClassLoaderImpl(URL[] urls) {
@@ -50,6 +45,10 @@ public class ModuleClassLoaderImpl extends ModuleClassLoader {
 	
 	public void  addBootloaderPackage(String name) {
 		((FilteredClassloader) getParent()).getBootloaderPackages().add(name);
+	}
+
+	public void  addBootloaderClass(String name) {
+		((FilteredClassloader) getParent()).getBootloaderClasses().add(name);
 	}
 
 	public List<ModuleClassLoader> getModuleClassloders() {
