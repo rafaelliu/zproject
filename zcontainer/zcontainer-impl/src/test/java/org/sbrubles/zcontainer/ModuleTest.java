@@ -10,7 +10,7 @@ import org.sbrubles.zcontainer.api.Container;
 import org.sbrubles.zcontainer.api.module.Module;
 import org.sbrubles.zcontainer.impl.ContainerImpl;
 import org.sbrubles.zcontainer.impl.util.ModuleConfigurationBuilder;
-import org.sbrubles.zcontainer.test.util.ModuleArchive;
+import org.sbrubles.zcontainer.util.ModuleArchive;
 
 import test.ClassA;
 import test.ClassB;

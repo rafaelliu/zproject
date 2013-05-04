@@ -33,7 +33,7 @@ import org.sbrubles.zcontainer.api.module.ModuleStatus;
 import org.sbrubles.zcontainer.impl.config.Configuration;
 import org.sbrubles.zcontainer.impl.module.ModuleImpl;
 import org.sbrubles.zcontainer.impl.util.ZipUtils;
-import org.sbrubles.zcontainer.impl.weld.WeldListener;
+import org.sbrubles.zcontainer.impl.weld.ManagerRegistry;
 
 public class ContainerImpl extends Container {
 	
@@ -59,7 +59,7 @@ public class ContainerImpl extends Container {
 		}
 		
 		// register core listeners
-		coreListeners.add(new WeldListener());
+		coreListeners.add(new ManagerRegistry());
 	}
 	
 	public Collection<Module> getModules() {

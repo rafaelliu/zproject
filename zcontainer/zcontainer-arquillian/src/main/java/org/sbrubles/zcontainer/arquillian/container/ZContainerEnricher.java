@@ -124,7 +124,7 @@ public class ZContainerEnricher extends CDIInjectionEnricher {
 				}
 				if (beans.isEmpty()) {
 					log.warning("No CDI bean for " + clazz);
-					break;
+					continue;
 				}
 				
 				Bean<?> next = beans.iterator().next();
@@ -140,6 +140,7 @@ public class ZContainerEnricher extends CDIInjectionEnricher {
 				
 			} catch (Exception e) {
 				// Weld couldn't resolve it. skip
+				e.printStackTrace();
 				log.log(Level.FINE, "Couldn't inject " + f + ". This is not necessarily an error. Check previous logs.", e);
 			}
 		}

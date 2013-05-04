@@ -1,7 +1,14 @@
 package org.sbrubles.zcontainer.impl.classloader;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Vector;
+
+import org.apache.commons.collections.EnumerationUtils;
 
 public class FilteredClassloader extends ClassLoader {
 
@@ -46,5 +53,29 @@ public class FilteredClassloader extends ClassLoader {
 		return "FilteredClassloader [bootloaderPackages=" + bootloaderPackages
 				+ "]";
 	}
+
+//	// we won't pass through any resources
+//	@Override
+//	protected URL findResource(String name) {
+//		System.out.println(">>> " + name);
+//		return null;
+//	}
+//
+//	// we won't pass through any resources
+//	@Override
+//	protected Enumeration<URL> findResources(String name) throws IOException {
+//		System.out.println(">>> " + name);
+//		return Collections.emptyEnumeration();
+//	}
+//
+//	@Override
+//	public URL getResource(String name) {
+//		return findResource(name);
+//	}
+//
+//	@Override
+//	public Enumeration<URL> getResources(String name) throws IOException {
+//		return findResources(name);
+//	}
 
 }
