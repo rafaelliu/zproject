@@ -78,5 +78,10 @@ public class ModuleClassLoaderImpl extends ModuleClassLoader {
 	public String toString() {
 		return printTree(0);
 	}
+
+	@Override
+	public ClassLoader getMainClassloder() {
+		return getParent();
+	}
 	
 }

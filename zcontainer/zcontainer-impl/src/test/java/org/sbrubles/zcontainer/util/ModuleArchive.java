@@ -1,4 +1,4 @@
-package org.sbrubles.zcontainer.test.util;
+package org.sbrubles.zcontainer.util;
 import java.io.File;
 import java.io.InputStream;
 

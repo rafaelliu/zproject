@@ -16,8 +16,8 @@ import org.sbrubles.zcontainer.ContainerPackage;
 public abstract class ModuleClassLoader extends URLClassLoader {
 
 	public static final List<String> DEFAULT_BOOTLOADER_PACKAGES = Arrays.asList(
-			ContainerPackage.class.getPackage().getName() + ".api",
-			ContainerPackage.class.getPackage().getName() + ".impl",
+			"org.sbrubles.zcontainer.impl",
+			"org.sbrubles.zcontainer.api",
 			"java", "javax", "org.xml", "org.jboss.weld", "sun");
 
 	public static final String BOOTLOADER_PKGS_PARAMETER = "bootloader.packages";
@@ -39,6 +39,8 @@ public abstract class ModuleClassLoader extends URLClassLoader {
 	public abstract void addBootloaderPackage(String name);
 
 	public abstract void addBootloaderClass(String name);
+
+	public abstract ClassLoader getMainClassloder();
 
 	public abstract List<ModuleClassLoader> getModuleClassloders();
 
