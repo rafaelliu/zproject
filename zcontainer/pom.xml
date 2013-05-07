@@ -16,38 +16,4 @@
 		<module>zcontainer-core</module>
 	</modules>
 
-
-	<properties>
-
-        <!-- Versioning -->
-		<version.shrinkwrap_container_jetty>1.1.2</version.shrinkwrap_container_jetty>
-        <version.arquillian_core>1.0.3.Final</version.arquillian_core>
-        <version.cdi-api>1.0</version.cdi-api>
-
-	</properties>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.jboss.arquillian</groupId>
-				<artifactId>arquillian-bom</artifactId>
-				<version>${version.arquillian_core}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.arquillian</groupId>
-				<artifactId>arquillian-build</artifactId>
-				<version>${version.arquillian_core}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>javax.enterprise</groupId>
-				<artifactId>cdi-api</artifactId>
-				<version>${version.cdi-api}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 </project>

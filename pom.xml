@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -7,17 +8,60 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>transloader</module>
+		<module>cdiutils-vaadin7</module>
 		<module>zcontainer</module>
+		<module>zcenter</module>
 	</modules>
 
 
 	<properties>
 
-        <!-- override from parent -->
-        <maven.compiler.argument.target>1.7</maven.compiler.argument.target>
-        <maven.compiler.argument.source>1.7</maven.compiler.argument.source>
+		<!-- override from parent -->
+		<maven.compiler.argument.target>1.7</maven.compiler.argument.target>
+		<maven.compiler.argument.source>1.7</maven.compiler.argument.source>
+
+		<version.shrinkwrap_container_jetty>1.1.2</version.shrinkwrap_container_jetty>
+		<version.arquillian_core>1.0.3.Final</version.arquillian_core>
+		<version.cdi-api>1.0</version.cdi-api>
+		<version.weld>1.1.12.Final</version.weld>
 
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>${version.arquillian_core}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-build</artifactId>
+				<version>${version.arquillian_core}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.enterprise</groupId>
+				<artifactId>cdi-api</artifactId>
+				<version>${version.cdi-api}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.weld.se</groupId>
+				<artifactId>weld-se</artifactId>
+				<version>${version.weld}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.xml.bind</groupId>
+				<artifactId>jaxb-api</artifactId>
+				<version>2.2.9</version>
+				<scope>provided</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 
 	<build>
 		<plugins>
