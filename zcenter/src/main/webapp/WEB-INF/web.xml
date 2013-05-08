@@ -13,9 +13,8 @@
 		<servlet-name>Vaadin Application Servlet</servlet-name>
 		<servlet-class>com.vaadin.server.VaadinServlet</servlet-class>
 		<init-param>
-			<description>Vaadin UI to display</description>
-			<param-name>UI</param-name>
-			<param-value>org.sbrubles.zcenter.MyVaadinUI</param-value>
+			<param-name>UIProvider</param-name>
+			<param-value>com.vaadin.cdi.CDIUIProvider</param-value>
 		</init-param>
 	</servlet>
 	<servlet-mapping>
@@ -26,4 +25,24 @@
 		<servlet-name>Vaadin Application Servlet</servlet-name>
 		<url-pattern>/VAADIN/*</url-pattern>
 	</servlet-mapping>
+
+
+<listener>
+
+   <listener-class>org.jboss.weld.environment.servlet.Listener</listener-class>
+
+</listener>
+
+<resource-env-ref>
+
+   <resource-env-ref-name>BeanManager</resource-env-ref-name>
+
+   <resource-env-ref-type>
+
+      javax.enterprise.inject.spi.BeanManager
+
+   </resource-env-ref-type>
+
+</resource-env-ref>
+
 </web-app>
