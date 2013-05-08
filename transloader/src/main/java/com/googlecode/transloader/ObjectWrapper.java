@@ -126,11 +126,11 @@ public final class ObjectWrapper {
             Object result = method.invoke(getUnwrappedSelf(), clonedParameters);
             
             // TODO: push back
-            if (result == null) {
-            	return null;
-            } else {
-            	return cloner.cloneObjectUsing(this.getClass().getClassLoader(), result);
+            if (result != null) {
+            	result = cloner.cloneObjectUsing(this.getClass().getClassLoader(), result);
             }
+            
+            return result;
 
         } catch (Exception e) {
             // TODO test Exception from invoke
@@ -158,7 +158,6 @@ public final class ObjectWrapper {
      */
     public Object makeCastableTo(Class targetInterface) {
         Assert.isNotNull(targetInterface);
-//        return Proxy.newProxyInstance(targetInterface.getClassLoader(), new Class[]{targetInterface}, new Invoker());
         
         ProxyFactory factory = new ProxyFactory();
         factory.setSuperclass(targetInterface);
@@ -166,18 +165,10 @@ public final class ObjectWrapper {
         try {
 			return factory.create(new Class<?>[0], new Object[0], new JavassistInvoker());
 		} catch (Exception e) {
-			// TODO: handle!
-			e.printStackTrace();
-			return null;
+			throw new RuntimeException("Error while creating proxy for " + targetInterface, e);
 		}
     }
 
-    private class Invoker implements InvocationHandler {
-		public Object invoke(Object proxy, Method method, Object[] parameters) throws Throwable {
-			return ObjectWrapper.this.invoke(new InvocationDescription(method, parameters));
-		}
-	}
-    
     private class JavassistInvoker implements MethodHandler {
 
         public Object invoke(Object self, Method thisMethod, Method proceed, Object[] args) throws Throwable {

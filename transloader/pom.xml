@@ -3,6 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <name>Transloader</name>
     <modelVersion>4.0.0</modelVersion>
+	<parent>
+        <artifactId>zproject</artifactId>
+        <groupId>org.sbrubles.zproject</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>..</relativePath>
+    </parent>
     <groupId>com.googlecode.transloader</groupId>
     <artifactId>transloader</artifactId>
     <packaging>jar</packaging>
@@ -39,12 +45,6 @@
             <artifactId>objenesis</artifactId>
             <version>1.1</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-full</artifactId>
-            <version>2.0.2</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

@@ -8,7 +8,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>transloader</module>
-		<module>cdiutils-vaadin7</module>
+		<module>cdi-utils</module>
 		<module>zcontainer</module>
 		<module>zcenter</module>
 	</modules>
@@ -22,6 +22,8 @@
 
 		<version.shrinkwrap_container_jetty>1.1.2</version.shrinkwrap_container_jetty>
 		<version.arquillian_core>1.0.3.Final</version.arquillian_core>
+		<version.weld-servlet>1.1.0.Final</version.weld-servlet>
+
 		<version.cdi-api>1.0</version.cdi-api>
 		<version.weld>1.1.12.Final</version.weld>
 
@@ -43,6 +45,15 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.weld.servlet</groupId>
+				<artifactId>weld-servlet-parent</artifactId>
+				<version>${version.weld-servlet}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
 			<dependency>
 				<groupId>javax.enterprise</groupId>
 				<artifactId>cdi-api</artifactId>
@@ -62,6 +73,39 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<repositories>
+		<!-- The JBoss public Nexus repository is a composite repository of several 
+			major repositories -->
+		<!-- see http://community.jboss.org/wiki/MavenGettingStarted-Users -->
+		<!-- At the time of writing, Arquillian and the JBoss Java EE specification 
+			POMs are only in the JBoss Community public repository (not Maven central) -->
+		<repository>
+			<id>jboss-public-repository</id>
+			<name>JBoss Repository</name>
+			<url>https://repository.jboss.org/nexus/content/groups/public</url>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<updatePolicy>daily</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>jboss-public-repository</id>
+			<name>JBoss Repository</name>
+			<url>https://repository.jboss.org/nexus/content/groups/public</url>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>daily</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<build>
 		<plugins>
