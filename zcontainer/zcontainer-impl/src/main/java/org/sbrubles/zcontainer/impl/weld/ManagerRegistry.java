@@ -4,26 +4,28 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.enterprise.inject.spi.BeanManager;
+
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
 import org.sbrubles.zcontainer.api.classloader.ModuleClassLoader;
-import org.sbrubles.zcontainer.api.listener.Activator;
 import org.sbrubles.zcontainer.api.listener.ModuleListener;
 import org.sbrubles.zcontainer.api.module.Module;
-import org.sbrubles.zcontainer.impl.module.ModuleImpl;
 
 
 public class ManagerRegistry implements ModuleListener {
 
-	private static Map<Module, WeldContainer> weldContainers = new HashMap<Module, WeldContainer>();
+	private static Map<Module, BeanManager> weldContainers = new HashMap<Module, BeanManager>();
 	
-	public static Map<Module, WeldContainer> getManagers() {
+	public static Map<Module, BeanManager> getManagers() {
 		return Collections.unmodifiableMap(weldContainers);
 	}
 
+	@Override
 	public void onInstall(Module module) {
 	}
 
+	@Override
 	public void onActivate(Module module) {
 	
 		Thread thread = Thread.currentThread();
@@ -39,16 +41,18 @@ public class ManagerRegistry implements ModuleListener {
 
 		thread.setContextClassLoader(oldCCL);
 
-		((ModuleImpl) module).setWeld(initialize);
-
+		BeanManager bm = initialize.getBeanManager();
+		
 		// TODO: is put() thread-safe? 
 		synchronized (weldContainers) {
-			weldContainers.put(module, initialize);
+			weldContainers.put(module, bm);
 		}
 	}
 
+	@Override
 	public void onUninstall(Module module) {
-		weldContainers.remove(module);
+		// TODO Auto-generated method stub
+		
 	}
 
 }

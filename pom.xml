@@ -20,12 +20,16 @@
 		<maven.compiler.argument.target>1.7</maven.compiler.argument.target>
 		<maven.compiler.argument.source>1.7</maven.compiler.argument.source>
 
+        <version.jboss.spec.javaee.6.0>3.0.2.Final</version.jboss.spec.javaee.6.0>
+
 		<version.shrinkwrap_container_jetty>1.1.2</version.shrinkwrap_container_jetty>
 		<version.arquillian_core>1.0.3.Final</version.arquillian_core>
 		<version.weld-servlet>1.1.0.Final</version.weld-servlet>
 
 		<version.cdi-api>1.0</version.cdi-api>
-		<version.weld>1.1.12.Final</version.weld>
+		<version.weld>2.0.0.Final</version.weld>
+		
+		<vaadin.version>7.0.5</vaadin.version>
 
 	</properties>
 
@@ -53,6 +57,14 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+            <dependency>
+                <groupId>org.jboss.spec</groupId>
+                <artifactId>jboss-javaee-6.0</artifactId>
+                <version>${version.jboss.spec.javaee.6.0}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
 			<dependency>
 				<groupId>javax.enterprise</groupId>
@@ -90,6 +102,16 @@
 				<updatePolicy>daily</updatePolicy>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>vaadin-addons</id>
+			<url>http://maven.vaadin.com/vaadin-addons</url>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<updatePolicy>daily</updatePolicy>
+			</snapshots>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
@@ -101,10 +123,20 @@
 				<updatePolicy>never</updatePolicy>
 			</releases>
 			<snapshots>
-				<enabled>false</enabled>
 				<updatePolicy>daily</updatePolicy>
 			</snapshots>
 		</pluginRepository>
+		<pluginRepository>
+			<id>vaadin-addons</id>
+			<url>http://maven.vaadin.com/vaadin-addons</url>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<updatePolicy>daily</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+		
 	</pluginRepositories>
 
 	<build>
@@ -115,6 +147,13 @@
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
 		</plugins>

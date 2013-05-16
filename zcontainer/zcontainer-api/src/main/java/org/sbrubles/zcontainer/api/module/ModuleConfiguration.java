@@ -21,6 +21,16 @@ public class ModuleConfiguration {
 	@XmlElement(name="dependency")
 	private List<String> dependencies = new ArrayList<String>();
 	
+	@XmlElementWrapper(name="bootloader-packages")
+	@XmlElement(name="package")
+	private List<String> bootloaderPackages = new ArrayList<String>();
+
+	public List<String> getBootloaderPackages() {
+		return bootloaderPackages;
+	}
+	public void setBootloaderPackages(List<String> bootloaderPackages) {
+		this.bootloaderPackages = bootloaderPackages;
+	}
 	public String getModuleListenerClass() {
 		return moduleListenerClass;
 	}

@@ -19,6 +19,10 @@ public class ModuleConfigurationBuilder {
 		descriptor.getDependencies().add(name);
 		return this;
 	}
+	public ModuleConfigurationBuilder addBootloaderPackage(String name) {
+		descriptor.getBootloaderPackages().add(name);
+		return this;
+	}
 	public ModuleConfigurationBuilder addModuleListener(String name) {
 		descriptor.setModuleListenerClass(name);
 		return this;

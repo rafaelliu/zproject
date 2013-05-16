@@ -21,13 +21,11 @@ public class EventManager {
 	
 	public void observeZEvent(@Observes @ZEvent Object event) {
 		
-		Map<Module, WeldContainer> weldContainers =  ManagerRegistry.getManagers();
+		Map<Module, BeanManager> weldContainers =  ManagerRegistry.getManagers();
 		
-		Collection<WeldContainer> values = weldContainers.values();
+		Collection<BeanManager> values = weldContainers.values();
 		
-		for (WeldContainer c : values) {
-			BeanManager bm = c.getBeanManager();
-			
+		for (BeanManager bm : values) {
 			// don't retrow this event in this module
 			if (thisBm == bm) continue;
 			

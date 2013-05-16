@@ -6,20 +6,14 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javassist.Translator;
-
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.enterprise.inject.spi.InjectionTarget;
-import javax.imageio.plugins.bmp.BMPImageWriteParam;
 
 import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaData;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.core.api.Instance;
 import org.jboss.arquillian.core.api.annotation.Inject;
-import org.jboss.arquillian.test.spi.TestEnricher;
 import org.jboss.arquillian.testenricher.cdi.CDIInjectionEnricher;
 import org.sbrubles.zcontainer.api.Container;
 import org.sbrubles.zcontainer.api.classloader.ModuleClassLoader;
@@ -28,8 +22,6 @@ import org.sbrubles.zcontainer.api.module.Module;
 import com.googlecode.transloader.DefaultTransloader;
 import com.googlecode.transloader.ObjectWrapper;
 import com.googlecode.transloader.Transloader;
-
-import test.ClassA;
 
 public class ZContainerEnricher extends CDIInjectionEnricher {
 	
@@ -40,7 +32,7 @@ public class ZContainerEnricher extends CDIInjectionEnricher {
 
 	@Override
 	public BeanManager getBeanManager() {
-		Module first = getFirst(protocolMetadata.get(), Module.class);
+		Module first = getModule();
 		return ( first != null ? first.getBeanManager() : null );
 	}
 
@@ -49,12 +41,12 @@ public class ZContainerEnricher extends CDIInjectionEnricher {
 	}
 
 	public ModuleClassLoader getClassloader() {
-		Module first = getFirst(protocolMetadata.get(), Module.class);
+		Module first = getModule();
 		return ( first != null ? first.getClassloader() : null );
 	}
 
 	public Container getContainer() {
-		Module first = getFirst(protocolMetadata.get(), Module.class);
+		Module first = getModule();
 		return ( first != null ? first.getConstainer() : null );
 	}
 

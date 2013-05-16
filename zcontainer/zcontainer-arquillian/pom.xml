@@ -69,14 +69,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.sbrubles.zcontainer.api</groupId>
-			<artifactId>zcontainer-api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>com.googlecode.transloader</groupId>
 			<artifactId>transloader</artifactId>
 			<version>0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.sbrubles.zproject</groupId>
+			<artifactId>zcontainer-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

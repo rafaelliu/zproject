@@ -22,7 +22,7 @@ public interface Module {
 
 	public abstract File getFile();
 
-	public abstract ModuleDescriptor getDescriptor();
+	public abstract ModuleConfiguration getDescriptor();
 
 	public abstract ModuleClassLoader getClassloader();
 

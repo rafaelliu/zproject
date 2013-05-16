@@ -47,12 +47,11 @@ public class ServiceRegistry extends CacheLoader<Type, ZService<?>> {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ZService<?> load(Type key) {
-		Map<Module, WeldContainer> weldContainers =  ManagerRegistry.getManagers();
+		Map<Module, BeanManager> weldContainers =  ManagerRegistry.getManagers();
 
 		Object reference = null;
-		for (WeldContainer c : weldContainers.values()) {
+		for (BeanManager bm : weldContainers.values()) {
 			try {
-				BeanManager bm = c.getBeanManager();
 				CreationalContext<Object> cc = bm.createCreationalContext(null);
 
 				Set<Bean<?>> beans = bm.getBeans(key);

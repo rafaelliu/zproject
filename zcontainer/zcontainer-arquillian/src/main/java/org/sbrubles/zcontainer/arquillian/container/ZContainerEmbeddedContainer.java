@@ -1,9 +1,7 @@
 package org.sbrubles.zcontainer.arquillian.container;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.util.logging.Logger;
 
@@ -15,12 +13,8 @@ import org.jboss.arquillian.container.spi.client.protocol.metadata.ProtocolMetaD
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.exporter.ZipExporter;
 import org.jboss.shrinkwrap.descriptor.api.Descriptor;
-import org.jboss.weld.environment.se.Weld;
-import org.jboss.weld.environment.se.WeldContainer;
 import org.sbrubles.zcontainer.api.Container;
-import org.sbrubles.zcontainer.api.classloader.ModuleClassLoader;
 import org.sbrubles.zcontainer.api.module.Module;
-import org.sbrubles.zcontainer.api.module.ModuleDescriptor;
 
 public class ZContainerEmbeddedContainer implements DeployableContainer<ZContainerEmbeddedConfiguration>
 {

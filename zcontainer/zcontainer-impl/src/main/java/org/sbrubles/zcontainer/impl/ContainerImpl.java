@@ -28,7 +28,6 @@ import org.sbrubles.zcontainer.api.deployers.Deployer;
 import org.sbrubles.zcontainer.api.listener.ModuleListener;
 import org.sbrubles.zcontainer.api.module.Module;
 import org.sbrubles.zcontainer.api.module.ModuleConfiguration;
-import org.sbrubles.zcontainer.api.module.ModuleDescriptor;
 import org.sbrubles.zcontainer.api.module.ModuleStatus;
 import org.sbrubles.zcontainer.impl.config.Configuration;
 import org.sbrubles.zcontainer.impl.module.ModuleImpl;
@@ -101,18 +100,15 @@ public class ContainerImpl extends Container {
 			InstantiationException, IllegalAccessException, IOException {
 		
 		// TODO: merge ModuleDescriptor and ModuleConfiguration
-		ModuleDescriptor descriptor;
-		if (configuration == null) {
-			descriptor = new ModuleDescriptor(file.getName());
-		} else {
-			descriptor = new ModuleDescriptor(configuration.getName());
+		Module module = new ModuleImpl(this, file, configuration);
 
-			descriptor.setDependencies(configuration.getDependencies());
-			descriptor.setContainerListenerClass(configuration.getContainerListenerClass());
-			descriptor.setModuleListenerClass(configuration.getModuleListenerClass());
-		}
+		return addModule(module, configuration);
+	}
+
+	public Module addModule(Module module, ModuleConfiguration descriptor)
+			throws MalformedURLException, ClassNotFoundException,
+			InstantiationException, IllegalAccessException {
 		
-		ModuleImpl module = new ModuleImpl(this, file, descriptor);
 		modules.put(descriptor.getName(), module);
 		notify(module, ModuleStatus.INSTALLED);
 
