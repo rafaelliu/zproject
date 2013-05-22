@@ -12,8 +12,10 @@
 	<modules>
 		<module>zcontainer-api</module>
 		<module>zcontainer-impl</module>
-		<module>zcontainer-arquillian</module>
-		<module>zcontainer-core</module>
+		<module>zcontainer-arquillian-archive</module>
+		<module>zcontainer-arquillian-extension</module>
+		<module>zcontainer-filesystem-deployer</module>
+		<module>zcontainer-embedded-deployer</module>
 	</modules>
 
 </project>

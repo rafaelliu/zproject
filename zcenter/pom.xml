@@ -75,5 +75,10 @@
 			<artifactId>zcontainer-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.sbrubles.zproject</groupId>
+			<artifactId>zcontainer-embedded-deployer</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>

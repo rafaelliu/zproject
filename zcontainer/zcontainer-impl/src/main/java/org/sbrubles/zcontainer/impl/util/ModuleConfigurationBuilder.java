@@ -2,6 +2,7 @@ package org.sbrubles.zcontainer.impl.util;
 
 import java.io.File;
 
+import org.sbrubles.zcontainer.api.module.BootloaderFilter.FilterType;
 import org.sbrubles.zcontainer.api.module.ModuleConfiguration;
 import org.sbrubles.zcontainer.impl.config.Configuration;
 
@@ -19,8 +20,12 @@ public class ModuleConfigurationBuilder {
 		descriptor.getDependencies().add(name);
 		return this;
 	}
+	public ModuleConfigurationBuilder setBootloaderType(FilterType type) {
+		descriptor.getBootloaderFilter().setFilterType(type);
+		return this;
+	}
 	public ModuleConfigurationBuilder addBootloaderPackage(String name) {
-		descriptor.getBootloaderPackages().add(name);
+		descriptor.getBootloaderFilter().addPackage(name);
 		return this;
 	}
 	public ModuleConfigurationBuilder addModuleListener(String name) {

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.sbrubles.zcontainer.api.Container;
@@ -44,6 +45,9 @@ public class ContainerImpl extends Container {
 	private List<Deployer> deployers = new ArrayList<Deployer>();
 	
 	public ContainerImpl() {
+		// Register core listeners. Do that before Deployers so they can trigger listeners
+		coreListeners.add(new ManagerRegistry());
+
 		// initialize deployers
 		ServiceLoader<Deployer> deployerServices = ServiceLoader.load(Deployer.class);
 		Iterator<Deployer> iterator = deployerServices.iterator();
@@ -53,12 +57,9 @@ public class ContainerImpl extends Container {
 				d.init(this);
 				deployers.add(d);
 			} catch (Exception e) {
-				System.err.println("Erro ao iniciar deployer " + d);
+				logger.log(Level.WARNING, "Error initializing deployer " + d.getClass() + ". Container may not behave properly", e);
 			}
 		}
-		
-		// register core listeners
-		coreListeners.add(new ManagerRegistry());
 	}
 	
 	public Collection<Module> getModules() {
@@ -74,7 +75,7 @@ public class ContainerImpl extends Container {
 		File outputFile = outputPath.toFile();
 		ZipUtils.extract(in, outputFile);
 		
-		File configFile = new File(outputFile, Configuration.CONFIG_FILE);
+		File configFile = new File(outputFile, Configuration.CONFIG_PATH);
 		ModuleConfiguration desc = Configuration.readModuleConfiguration(configFile);
 		
 		return install(outputFile, desc);
@@ -102,14 +103,14 @@ public class ContainerImpl extends Container {
 		// TODO: merge ModuleDescriptor and ModuleConfiguration
 		Module module = new ModuleImpl(this, file, configuration);
 
-		return addModule(module, configuration);
+		return addModule(module);
 	}
 
-	public Module addModule(Module module, ModuleConfiguration descriptor)
+	public Module addModule(Module module)
 			throws MalformedURLException, ClassNotFoundException,
 			InstantiationException, IllegalAccessException {
 		
-		modules.put(descriptor.getName(), module);
+		modules.put(module.getConfiguration().getName(), module);
 		notify(module, ModuleStatus.INSTALLED);
 
 		for (Module m : modules.values()) {

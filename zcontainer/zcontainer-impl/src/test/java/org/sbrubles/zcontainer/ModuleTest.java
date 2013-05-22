@@ -3,14 +3,16 @@ package org.sbrubles.zcontainer;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.exporter.ZipExporter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.sbrubles.zcontainer.api.Container;
 import org.sbrubles.zcontainer.api.module.Module;
+import org.sbrubles.zcontainer.arquillian.archive.ZArchive;
 import org.sbrubles.zcontainer.impl.ContainerImpl;
 import org.sbrubles.zcontainer.impl.util.ModuleConfigurationBuilder;
-import org.sbrubles.zcontainer.util.ModuleArchive;
 
 import test.ClassA;
 import test.ClassB;
@@ -32,35 +34,35 @@ public class ModuleTest {
 
 	@Before
 	public void init() throws Exception {
-		InputStream isA = ModuleArchive.newInstance(MODULE_A + ".jar")
-			.addClass(ClassA.class)
-			.addConfiguration(
-					ModuleConfigurationBuilder
-					.newInstance(MODULE_A)
-					.build()
-			).getInputStream();
+		ZArchive archiveA = ShrinkWrap.create(ZArchive.class)
+				.addClass(ClassA.class)
+				.addAsConfiguration(
+						ModuleConfigurationBuilder
+							.newInstance(MODULE_A)
+							.build()
+						);
 
-		InputStream isB = ModuleArchive.newInstance(MODULE_B + ".jar")
+		ZArchive archiveB = ShrinkWrap.create(ZArchive.class)
 			.addClass(ClassB.class)
-			.addConfiguration(
+			.addAsConfiguration(
 					ModuleConfigurationBuilder
 					.newInstance(MODULE_B)
 					.addDependency(MODULE_A)
 					.build()
-			).getInputStream();
+			);
 
-		InputStream isC = ModuleArchive.newInstance(MODULE_C + ".jar")
+		ZArchive archiveC = ShrinkWrap.create(ZArchive.class)
 			.addClass(ClassC.class)
-			.addConfiguration(
+			.addAsConfiguration(
 					ModuleConfigurationBuilder
 					.newInstance(MODULE_C)
 					.addDependency(MODULE_B)
 					.build()
-			).getInputStream();
+			);
 		
-		moduleA = container.install(isA);
-		moduleB = container.install(isB);
-		moduleC = container.install(isC);
+		moduleA = container.install(asInputStream(archiveA));
+		moduleB = container.install(asInputStream(archiveB));
+		moduleC = container.install(asInputStream(archiveC));
 	}
 	
 	@Test(expected=ClassNotFoundException.class)
@@ -82,4 +84,8 @@ public class ModuleTest {
 		Assert.assertTrue(class1.getClassLoader() != getClass().getClassLoader());
 	}
 	
+	private InputStream asInputStream(ZArchive archive) {
+		return archive.as(ZipExporter.class).exportAsInputStream();
+	}
+
 }

@@ -5,7 +5,7 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.sbrubles.zcontainer.impl.weld.ZEvent;
+import org.sbrubles.zcontainer.impl.weld.beans.ZEvent;
 
 @Named
 public class ServerClass {

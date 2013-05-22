@@ -11,18 +11,23 @@ import java.util.List;
 import javax.enterprise.inject.spi.BeanManager;
 
 import org.sbrubles.zcontainer.api.Container;
+import org.sbrubles.zcontainer.api.classloader.FilteredClassloader;
 import org.sbrubles.zcontainer.api.classloader.ModuleClassLoader;
 import org.sbrubles.zcontainer.api.listener.Activator;
 import org.sbrubles.zcontainer.api.listener.ModuleListener;
+import org.sbrubles.zcontainer.api.module.BootloaderFilter;
+import org.sbrubles.zcontainer.api.module.BootloaderFilter.FilterType;
 import org.sbrubles.zcontainer.api.module.Module;
 import org.sbrubles.zcontainer.api.module.ModuleConfiguration;
 import org.sbrubles.zcontainer.api.module.ModuleStatus;
+import org.sbrubles.zcontainer.impl.classloader.BlacklistClassloader;
 import org.sbrubles.zcontainer.impl.classloader.ModuleClassLoaderImpl;
+import org.sbrubles.zcontainer.impl.classloader.WhitelistClassloader;
 
 public class ModuleImpl implements Module {
 
 	private File file;
-	private ModuleConfiguration descriptor;
+	private ModuleConfiguration configuration;
 	private ModuleClassLoader classloader;
 	private ModuleStatus status;
 	private ModuleListener moduleListener;
@@ -33,7 +38,7 @@ public class ModuleImpl implements Module {
 	public ModuleImpl(Container container, File file, ModuleConfiguration descriptor) throws MalformedURLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 		this.container = container;
 		this.file = file;
-		this.descriptor = descriptor;
+		this.configuration = descriptor;
 		this.status = ModuleStatus.INSTALLED;
 		
 		List<URL> urls = new ArrayList<URL>();
@@ -51,12 +56,17 @@ public class ModuleImpl implements Module {
 			}
 		}
 		
-		List<String> bootloaderPackages = descriptor.getBootloaderPackages();
-		if (bootloaderPackages == null || bootloaderPackages.isEmpty()) {
-			bootloaderPackages = ModuleClassLoaderImpl.DEFAULT_BOOTLOADER_PACKAGES;
+		FilteredClassloader fc;
+		BootloaderFilter bf = descriptor.getBootloaderFilter();
+		if (bf.getFilterType() == FilterType.WHITELIST) {
+			fc = new WhitelistClassloader(bf.getPackages(), bf.getClasses());
+		} else if (bf.getFilterType() == FilterType.BLACKLIST) {
+			fc = new BlacklistClassloader(bf.getPackages(), bf.getClasses());
+		} else {
+			throw new IllegalStateException("Unkown FilterType");
 		}
 		
-		classloader = new ModuleClassLoaderImpl( urls.toArray(new URL[0]), bootloaderPackages  );
+		classloader = new ModuleClassLoaderImpl( urls.toArray(new URL[0]), fc);
 		
 		String moduleListenerClass = descriptor.getModuleListenerClass();
 		if (moduleListenerClass != null) {
@@ -102,13 +112,13 @@ public class ModuleImpl implements Module {
 	}
 
 	public ModuleConfiguration getDescriptor() {
-		return descriptor;
+		return configuration;
 	}
 
 
 	@Override
 	public String toString() {
-		return "Module [file=" + file + ", descriptor=" + descriptor
+		return "Module [file=" + file + ", descriptor=" + configuration
 				+ ", status=" + status + "]";
 	}
 
@@ -126,6 +136,11 @@ public class ModuleImpl implements Module {
 
 	public Container getConstainer() {
 		return container;
+	}
+
+	@Override
+	public ModuleConfiguration getConfiguration() {
+		return configuration;
 	}
 
 }

@@ -34,12 +34,6 @@ public abstract class ModuleClassLoader extends URLClassLoader {
 
 	// ========================
 
-	public abstract void addClasspath(URL url);
-
-	public abstract void addBootloaderPackage(String name);
-
-	public abstract void addBootloaderClass(String name);
-
 	public abstract ClassLoader getMainClassloder();
 
 	public abstract List<ModuleClassLoader> getModuleClassloders();

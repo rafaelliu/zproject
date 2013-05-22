@@ -2,12 +2,10 @@ package org.sbrubles.zcontainer.impl.classloader;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.sbrubles.zcontainer.api.Container;
+import org.sbrubles.zcontainer.api.classloader.FilteredClassloader;
 import org.sbrubles.zcontainer.api.classloader.ModuleClassLoader;
-import org.sbrubles.zcontainer.impl.ContainerImpl;
 
 /**
  * Modules can load classes from it's classpath or from other modules.
@@ -23,34 +21,25 @@ public class ModuleClassLoaderImpl extends ModuleClassLoader {
 
 	/**
 	 * 
-	 * @param urls Classpath for this module
-	 * @param moduleClassloders Dependencies modules
+	 * @param urls URL to be passed to URLClassLoader. Order is important.
+	 * @param moduleClassloaders Classloader of dependency modules
+	 * @param parentClassloader Parent classloader can be either WhitelistClassloader or BlacklistClassloader
 	 */
-	public ModuleClassLoaderImpl(URL[] urls, List<ModuleClassLoader> moduleClassloders, List<String> bootloaderPackages) {
-		super(urls, new FilteredClassloader(bootloaderPackages, null));
-		this.moduleClassloders = moduleClassloders;
-	}
-	
-	public ModuleClassLoaderImpl(URL[] urls, List<String> bootloaderPackages) {
-		this(urls, new ArrayList<ModuleClassLoader>(), bootloaderPackages);
-	}
-	
-	public ModuleClassLoaderImpl(URL[] urls) {
-		this(urls, new ArrayList<ModuleClassLoader>(), DEFAULT_BOOTLOADER_PACKAGES);
-	}
-	
-	public void addClasspath(URL url) {
-		super.addURL(url);
-	}
-	
-	public void  addBootloaderPackage(String name) {
-		((FilteredClassloader) getParent()).getBootloaderPackages().add(name);
+	public ModuleClassLoaderImpl(URL[] urls, List<ModuleClassLoader> moduleClassloaders, FilteredClassloader parentClassloader) {
+		super(urls, parentClassloader);
+		this.moduleClassloders = moduleClassloaders;
 	}
 
-	public void  addBootloaderClass(String name) {
-		((FilteredClassloader) getParent()).getBootloaderClasses().add(name);
+	/**
+	 * 
+	 * @param urls URL to be passed to URLClassLoader. Order is important.
+	 * @param moduleClassloaders Classloader of dependency modules
+	 * @param parentClassloader Parent classloader can be either WhitelistClassloader or BlacklistClassloader
+	 */
+	public ModuleClassLoaderImpl(URL[] urls, FilteredClassloader parentClassloader) {
+		this(urls, new ArrayList<ModuleClassLoader>(), parentClassloader);
 	}
-
+	
 	public List<ModuleClassLoader> getModuleClassloders() {
 		return moduleClassloders;
 	}

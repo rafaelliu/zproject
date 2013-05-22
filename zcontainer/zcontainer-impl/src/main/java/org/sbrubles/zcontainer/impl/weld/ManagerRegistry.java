@@ -6,11 +6,14 @@ import java.util.Map;
 
 import javax.enterprise.inject.spi.BeanManager;
 
-import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
+import org.jboss.weld.environment.se.WeldSEBeanRegistrant;
 import org.sbrubles.zcontainer.api.classloader.ModuleClassLoader;
 import org.sbrubles.zcontainer.api.listener.ModuleListener;
 import org.sbrubles.zcontainer.api.module.Module;
+import org.sbrubles.zcontainer.impl.module.ModuleImpl;
+import org.sbrubles.zcontainer.impl.weld.extension.ZContainerModuleExtension;
+import org.sbrubles.zcontainer.impl.weld.extension.ZContainerExtension;
 
 
 public class ManagerRegistry implements ModuleListener {
@@ -27,21 +30,25 @@ public class ManagerRegistry implements ModuleListener {
 
 	@Override
 	public void onActivate(Module module) {
+		
+		// give the module a change to define its own bm.
+		BeanManager bm = module.getBeanManager();
+		
+		if (bm == null) {
 	
-		Thread thread = Thread.currentThread();
+			// TODO: throw an exception when a bean is ignored!
+			// Weld logs an info:  WELD-000119 Not generating any bean definitions from test.ClassA because of underlying class loading error
+			ClassLoader cl = module.getClassloader();
+			Weld weld = new Weld();
+			weld.addExtension(new ZContainerModuleExtension());
+			weld.addExtension(new WeldSEBeanRegistrant());
+			WeldContainer initialize = weld.initialize(cl);
+	
+			bm = initialize.getBeanManager();
+			
+		}
 		
-		ClassLoader oldCCL = thread.getContextClassLoader();
-		ModuleClassLoader moduleClassloader = module.getClassloader();
-
-		thread.setContextClassLoader(moduleClassloader);
-		
-		// TODO: throw an exception when a bean is ignored!
-		// Weld logs an info:  WELD-000119 Not generating any bean definitions from test.ClassA because of underlying class loading error
-		WeldContainer initialize = new Weld().initialize();
-
-		thread.setContextClassLoader(oldCCL);
-
-		BeanManager bm = initialize.getBeanManager();
+		((ModuleImpl) module).setBeanManager(bm);
 		
 		// TODO: is put() thread-safe? 
 		synchronized (weldContainers) {

@@ -18,6 +18,9 @@ public interface Module {
 
 	public abstract ModuleListener getModuleListener();
 
+	// TODO: we should retrive it read-only (extract and getter API?)
+	public abstract ModuleConfiguration getConfiguration();
+
 	public abstract Activator getContainerListener();
 
 	public abstract File getFile();

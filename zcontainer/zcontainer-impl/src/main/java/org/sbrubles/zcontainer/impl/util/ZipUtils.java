@@ -73,7 +73,8 @@ public class ZipUtils {
 
 				extractFile(zin, outdir, name);
 			}
-			zin.close();
+			// TODO: was throwing IOException: Pipe closed
+			//zin.close();
 		} catch (IOException e) {
 			throw new RuntimeException("Error unziping InputStream to " + outdir, e);
 		}

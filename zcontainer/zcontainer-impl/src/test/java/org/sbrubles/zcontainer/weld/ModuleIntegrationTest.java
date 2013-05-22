@@ -1,6 +1,7 @@
 package org.sbrubles.zcontainer.weld;
 
 
+import java.io.File;
 import java.net.MalformedURLException;
 
 import javax.inject.Inject;
@@ -16,6 +17,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sbrubles.zcontainer.arquillian.archive.ZArchive;
+import org.sbrubles.zcontainer.impl.config.Configuration;
 import org.sbrubles.zcontainer.impl.util.ModuleConfigurationBuilder;
 
 import test.ClassA;
@@ -33,6 +35,12 @@ public class ModuleIntegrationTest {
 	
 	@Deployment(name = MODULE_CLIENT, order = 1)
 	public static ZArchive moduleA() {
+		File writeModuleConfiguration = Configuration.writeModuleConfiguration(ModuleConfigurationBuilder
+		.newInstance(MODULE_CLIENT)
+		.addDependency(MODULE_SERVER)
+		.build());
+		System.out.println(writeModuleConfiguration);
+		
 		return ShrinkWrap.create(ZArchive.class , MODULE_CLIENT)
 				.addClass(ClientClass.class)
 				.addAsConfiguration(

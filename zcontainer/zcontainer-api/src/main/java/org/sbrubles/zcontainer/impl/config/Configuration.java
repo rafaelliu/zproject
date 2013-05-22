@@ -1,6 +1,7 @@
 package org.sbrubles.zcontainer.impl.config;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,12 +18,25 @@ public class Configuration {
 	
 	public static String TEMP_DIR;
 	
-	public static final String CONFIG_FILE = "META-INF/config.xml";
+	public static final String CONFIG_FILE = "config.xml";
+	public static final String CONFIG_PATH = "META-INF/" + CONFIG_FILE;
 
 	static {
 		TEMP_DIR = System.getProperty("tempDir");
 		if (TEMP_DIR == null) {
 			TEMP_DIR = System.getProperty("java.io.tmpdir");
+		}
+	}
+	
+	public static ModuleConfiguration readModuleConfiguration(InputStream is) {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(ModuleConfiguration.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+
+			return (ModuleConfiguration) jaxbUnmarshaller.unmarshal(is);
+		} catch (Exception e) {
+			logger.log(Level.FINE, "Could not read configuration from InputStream", e);
+			return null;
 		}
 	}
 	
